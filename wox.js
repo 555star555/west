@@ -10,9 +10,7 @@
   //  localStorage.clear();
     Lampa.Storage.set('parser_use', 'true');
     Lampa.Storage.set('jackett_url', 'jacred.xyz');
-   // Lampa.Storage.set('torrserver_use_link', 'one');
-   // Lampa.Storage.set('torrserver_url', 'http://95.165.134.227:5550');
-   // Lampa.Storage.set('torrserver_url', location.protocol + '//tor.ab2024.ru');
+   
 
 	/*Запуск сторонних плагинов*/
     Lampa.Utils.putScriptAsync([getPath('/online.js?v=' + Math.random())], function() { window.lampac_localhost = '//' + location.hostname + '/' })
@@ -21,7 +19,7 @@
 	/*Удаляем ненужное из меню настроек*/
  // window.lampa_settings.dcma = true;
   window.lampa_settings.torrents_use = true;
-  window.lampa_settings.plugins_use = false;
+  
   window.lampa_settings.account_use = false;
 Lampa.Settings.listener.follow('open', function (e) {
  if (e.name == 'main') {
@@ -29,7 +27,7 @@ Lampa.Settings.listener.follow('open', function (e) {
      $('div[data-component="my_iptv"]').remove();
      $('div[data-component="tmdb"]').remove();
      $('div[data-component="parental_control"]').remove();
-     $('div[data-component="my_iptv2"]').remove();
+     
      $('div[data-component="parser"]').remove();
     $('div[data-component="server"]').remove();
    }, 5)
@@ -56,7 +54,7 @@ Lampa.Settings.listener.follow('open', function (e) {
                         $("[data-action=anime]").eq(0).remove();
                         
                         $("[data-action=mytorrents]").eq(0).remove();
-                        $("[data-action=about]").eq(0).remove();
+                        
                         $("[data-action=console]").eq(0).remove();
                         $("[data-action=feed]").eq(0).remove();
                         $("[data-action=subscribes]").eq(0).remove();
