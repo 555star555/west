@@ -12,14 +12,12 @@
     Lampa.Storage.set('jackett_url', 'jacred.xyz');
    
 
-	/*Запуск сторонних плагинов*/
-    Lampa.Utils.putScriptAsync([getPath('/online.js?v=' + Math.random())], function() { window.lampac_localhost = '//' + location.hostname + '/' })
-    Lampa.Utils.putScriptAsync(['/stil.js?v=' + Math.random(), getPath('/tmdbproxy.js?v=' + Math.random()), getPath('/rating.js'), getPath('/sisi.js'), getPath('/metrika.js'), '//cub.red/plugin/collections', '//cub.red/plugin/tracks'], function () {});
+	
 
 	/*Удаляем ненужное из меню настроек*/
  // window.lampa_settings.dcma = true;
   window.lampa_settings.torrents_use = true;
-  window.lampa_settings.plugins_use = false;
+  
   window.lampa_settings.account_use = false;
 Lampa.Settings.listener.follow('open', function (e) {
  if (e.name == 'main') {
@@ -51,7 +49,7 @@ Lampa.Settings.listener.follow('open', function (e) {
   Lampa.Listener.follow('app', function (e) {
      if (e.type == 'ready') {
              setTimeout(function(){
-                        $("[data-action=anime]").eq(0).remove();
+                        
                         
                         $("[data-action=mytorrents]").eq(0).remove();
                         $("[data-action=about]").eq(0).remove();
@@ -283,120 +281,6 @@ if (!Lampa.Storage.get('player_def')) {
         }
     });
 
-})();
-
-
-
-
-
-(function() {
-  'use strict';
-
-  function _typeof(obj) {
-    "@babel/helpers - typeof";
-
-    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
-      return typeof obj;
-    } : function(obj) {
-      return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    }, _typeof(obj);
-  }
-
-  var host = 'https://bwa.to';
-  var hostcloud = ['https://bwa.to/cloud.js?v=20012024'];
-
-  var framework = 'https://bwa.pages.dev';
-  var framework_version = '?v=20012024-2';
-
-  var plugins = ["o.js"];
-  var plugins_version = '?v=20012024';
-
-  if (typeof WebAssembly == 'undefined') {
-    Lampa.Utils.putScriptAsync(hostcloud, function() {});
-  } 
-  else if (window.bwainit) {
-    Lampa.Utils.putScriptAsync(plugins.filter(function(u) {
-      return (!window.bwa_plugin && u == 'o.js');
-    }).map(function(u) {
-      return host + '/plugins/' + u + plugins_version;
-    }), function() {});
-  } 
-  else 
-  {
-    var s = document.createElement('script');
-    s.onload = function() {
-      if (typeof Blazor == 'undefined') {
-        Lampa.Utils.putScriptAsync(hostcloud, function() {});
-        return;
-      }
-
-      try {
-        Blazor.start({
-          loadBootResource: function loadBootResource(type, name, defaultUri, integrity) {
-            return framework + '/' + name + framework_version;
-          }
-        }).then(function() {
-          var net = new Lampa.Reguest();
-          window.httpReq = function(url, post, params) {
-            return new Promise(function(resolve, reject) {
-              net["native"](url, function(result) {
-                if (_typeof(result) == 'object') resolve(JSON.stringify(result));
-                else resolve(result);
-              }, reject, post, params);
-            });
-          };
-
-          var check = function check(good) 
-		  {
-            try {
-              DotNet.invokeMethodAsync("JinEnergy", 'initial').then(function(initial) 
-			  {
-                if (initial) {
-                  window.bwainit = true;
-                  console.log('BWA', 'check cors:', good);
-                  var type = Lampa.Platform.is('android') ? 'apk' : good ? 'cors' : 'web';
-                  var conf = host + '/settings/' + type + '.json';
-                  DotNet.invokeMethodAsync("JinEnergy", 'oninit', type, conf);
-                  Lampa.Utils.putScriptAsync(plugins.map(function(u) {
-                    return host + '/plugins/' + u + plugins_version;
-                  }), function() {});
-                } else {
-                  console.log('BWA', 'not initial');
-                  Lampa.Utils.putScriptAsync(hostcloud, function() {});
-                }
-              })["catch"](function(e) {
-                console.log('BWA', e);
-                Lampa.Utils.putScriptAsync(hostcloud, function() {});
-              });
-            } catch (e) {
-              console.log('BWA', e);
-              Lampa.Utils.putScriptAsync(hostcloud, function() {});
-            }
-          };
-
-          if (Lampa.Platform.is('android') || Lampa.Platform.is('tizen')) check(true);
-          else {
-            net.silent('https://github.com/', function() {
-              check(true);
-            }, function() {
-              check(false);
-            }, false, {
-              dataType: 'text'
-            });
-          }
-        })["catch"](function(e) {
-          console.log('BWA', e);
-          Lampa.Utils.putScriptAsync(hostcloud, function() {});
-        });
-      } catch (e) {
-        console.log('BWA', e);
-        Lampa.Utils.putScriptAsync(hostcloud, function() {});
-      }
-    };
-    s.setAttribute('autostart', 'false');
-    s.setAttribute('src', framework + '/blazor.webassembly.js' + framework_version);
-    document.body.appendChild(s);
-  }
 })();
 
 (function() {
@@ -1823,6 +1707,116 @@ if (!Lampa.Storage.get('player_def')) {
   }
   if (!window.bwacloud_plugin) startPlugin();
 
+})();
+
+(function() {
+  'use strict';
+
+  function _typeof(obj) {
+    "@babel/helpers - typeof";
+
+    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
+      return typeof obj;
+    } : function(obj) {
+      return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    }, _typeof(obj);
+  }
+
+  var host = 'https://bwa.to';
+  var hostcloud = ['https://bwa.to/cloud.js?v=20012024'];
+
+  var framework = 'https://bwa.pages.dev';
+  var framework_version = '?v=20012024-2';
+
+  var plugins = ["o.js"];
+  var plugins_version = '?v=20012024';
+
+  if (typeof WebAssembly == 'undefined') {
+    Lampa.Utils.putScriptAsync(hostcloud, function() {});
+  } 
+  else if (window.bwainit) {
+    Lampa.Utils.putScriptAsync(plugins.filter(function(u) {
+      return (!window.bwa_plugin && u == 'o.js');
+    }).map(function(u) {
+      return host + '/plugins/' + u + plugins_version;
+    }), function() {});
+  } 
+  else 
+  {
+    var s = document.createElement('script');
+    s.onload = function() {
+      if (typeof Blazor == 'undefined') {
+        Lampa.Utils.putScriptAsync(hostcloud, function() {});
+        return;
+      }
+
+      try {
+        Blazor.start({
+          loadBootResource: function loadBootResource(type, name, defaultUri, integrity) {
+            return framework + '/' + name + framework_version;
+          }
+        }).then(function() {
+          var net = new Lampa.Reguest();
+          window.httpReq = function(url, post, params) {
+            return new Promise(function(resolve, reject) {
+              net["native"](url, function(result) {
+                if (_typeof(result) == 'object') resolve(JSON.stringify(result));
+                else resolve(result);
+              }, reject, post, params);
+            });
+          };
+
+          var check = function check(good) 
+		  {
+            try {
+              DotNet.invokeMethodAsync("JinEnergy", 'initial').then(function(initial) 
+			  {
+                if (initial) {
+                  window.bwainit = true;
+                  console.log('BWA', 'check cors:', good);
+                  var type = Lampa.Platform.is('android') ? 'apk' : good ? 'cors' : 'web';
+                  var conf = host + '/settings/' + type + '.json';
+                  DotNet.invokeMethodAsync("JinEnergy", 'oninit', type, conf);
+                  Lampa.Utils.putScriptAsync(plugins.map(function(u) {
+                    return host + '/plugins/' + u + plugins_version;
+                  }), function() {});
+                } else {
+                  console.log('BWA', 'not initial');
+                  Lampa.Utils.putScriptAsync(hostcloud, function() {});
+                }
+              })["catch"](function(e) {
+                console.log('BWA', e);
+                Lampa.Utils.putScriptAsync(hostcloud, function() {});
+              });
+            } catch (e) {
+              console.log('BWA', e);
+              Lampa.Utils.putScriptAsync(hostcloud, function() {});
+            }
+          };
+
+          if (Lampa.Platform.is('android') || Lampa.Platform.is('tizen')) check(true);
+          else {
+            net.silent('https://github.com/', function() {
+              check(true);
+            }, function() {
+              check(false);
+            }, false, {
+              dataType: 'text'
+            });
+          }
+        })["catch"](function(e) {
+          console.log('BWA', e);
+          Lampa.Utils.putScriptAsync(hostcloud, function() {});
+        });
+      } catch (e) {
+        console.log('BWA', e);
+        Lampa.Utils.putScriptAsync(hostcloud, function() {});
+      }
+    };
+    s.setAttribute('autostart', 'false');
+    s.setAttribute('src', framework + '/blazor.webassembly.js' + framework_version);
+    document.body.appendChild(s);
+  }
 })();
 
 //13.01.2024 - Fix rezka2 default quality
